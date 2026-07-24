@@ -57,9 +57,9 @@ export const siteConfig: SiteConfig = {
 		// 顶栏标题文本
 		text: "你好呀ヾ(≧▽≦*)o",
 		// 顶栏标题图标路径，默认使用 public/assets/home/home.webp
-		icon: "assets/home/favicon.webp",
+		icon: "assets/home/home.webp",
 		// 网站Logo图片路径
-		logo: "assets/home/猫羽雫001.png",
+		logo: "assets/home/home.webp",
 	},
 
 	// 页面自动缩放配置
