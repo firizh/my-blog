@@ -43,6 +43,13 @@
   font-display: swap;
 }
 
+/* 导入 苹方 字体 */
+@font-face {
+  font-family: "苹方";
+  src: url("/assets/font/PingFang.ttc") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
 /* 确保平滑滚动，并稳定滚动条宽度以避免布局左右抖动 */
 html {
   scroll-behavior: smooth;
