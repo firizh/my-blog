@@ -57,9 +57,9 @@ export const siteConfig: SiteConfig = {
 		// 顶栏标题文本
 		text: "你好呀ヾ(≧▽≦*)o",
 		// 顶栏标题图标路径，默认使用 public/assets/home/home.webp
-		icon: "assets/home/home.webp",
+		icon: "/assets/home/home.webp",
 		// 网站Logo图片路径
-		logo: "assets/home/home.webp",
+		logo: "/assets/home/home.webp",
 	},
 
 	// 页面自动缩放配置
@@ -454,7 +454,7 @@ export const commentConfig: CommentConfig = {
 		mapping: "pathname",
 		strict: "0",
 		reactionsEnabled: "1",
-		emitMetadata: "0",
+		emitMetadata: "1",
 		inputPosition: "top",
 		theme: "preferred_color_scheme",
 		lang: SITE_LANG,
