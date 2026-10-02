@@ -40,14 +40,14 @@ export const siteConfig: SiteConfig = {
 
 	// 特色页面开关配置（关闭未使用的页面有助于提升 SEO，关闭后请记得在 navbarConfig 中移除对应链接）
 	featurePages: {
-		anime: true, // 番剧页面开关
+		anime: false, // 番剧页面开关
 		diary: true, // 日记页面开关
 		friends: true, // 友链页面开关
 		projects: true, // 项目页面开关
-		skills: true, // 技能页面开关
+		skills: false, // 技能页面开关
 		timeline: true, // 时间线页面开关
 		albums: true, // 相册页面开关
-		devices: true, // 设备页面开关
+		devices: false, // 设备页面开关
 	},
 
 	// 顶栏标题配置
@@ -306,11 +306,6 @@ export const navBarConfig: NavBarConfig = {
 			icon: "material-symbols:person",
 			children: [
 				{
-					name: "Anime",
-					url: "/anime/",
-					icon: "material-symbols:movie",
-				},
-				{
 					name: "Diary",
 					url: "/diary/",
 					icon: "material-symbols:book",
@@ -319,12 +314,6 @@ export const navBarConfig: NavBarConfig = {
 					name: "Gallery",
 					url: "/albums/",
 					icon: "material-symbols:photo-library",
-				},
-				{
-					name: "Devices",
-					url: "/devices/",
-					icon: "material-symbols:devices",
-					external: false,
 				},
 			],
 		},
@@ -356,11 +345,6 @@ export const navBarConfig: NavBarConfig = {
 					icon: "material-symbols:work",
 				},
 				{
-					name: "Skills",
-					url: "/skills/",
-					icon: "material-symbols:psychology",
-				},
-				{
 					name: "Timeline",
 					url: "/timeline/",
 					icon: "material-symbols:timeline",
@@ -377,6 +361,10 @@ export const profileConfig: ProfileConfig = {
 	typewriter: {
 		enable: true, // 启用个人简介打字机效果
 		speed: 80, // 打字速度（毫秒）
+		hitokoto: {
+			enable: true, // 使用一言API随机句子作为个人简介
+			categories: ["a", "b", "d", "h", "i", "k"], // 动画、漫画、文学、影视、诗词、哲学
+		},
 	},
 	links: [
 		{
@@ -397,7 +385,7 @@ export const profileConfig: ProfileConfig = {
 		{
 			name: "QQ",
 			icon: "fa7-brands:qq",
-			url: "https://wpa.qq.com/msgrd?v=3&uin=3814436297&site=qq&menu=yes",
+			url: "https://qm.qq.com/q/gYXSt1mcMM",
 		},
 	],
 };

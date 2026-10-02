@@ -50,6 +50,8 @@ import { i18n } from "../../../i18n/translation";
 						text={profileConfig.bio || ""}
 						speed={profileConfig.typewriter.speed}
 						class="inline-block"
+						hitokoto={profileConfig.typewriter.hitokoto?.enable}
+						hitokotoCategories={profileConfig.typewriter.hitokoto?.categories}
 					/>
 				) : (
 					profileConfig.bio

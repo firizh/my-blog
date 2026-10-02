@@ -5,6 +5,8 @@ export interface Props {
 	deleteSpeed?: number;
 	pauseTime?: number;
 	class?: string;
+	hitokoto?: boolean;
+	hitokotoCategories?: string[];
 }
 
 const {
@@ -13,6 +15,8 @@ const {
 	deleteSpeed = 50,
 	pauseTime = 2000,
 	class: className = "",
+	hitokoto = false,
+	hitokotoCategories = [],
 } = Astro.props;
 const textData = Array.isArray(text) ? JSON.stringify(text) : text;
 ---
@@ -22,7 +26,9 @@ const textData = Array.isArray(text) ? JSON.stringify(text) : text;
 	data-text={textData}
 	data-speed={speed}
 	data-delete-speed={deleteSpeed}
-	data-pause-time={pauseTime}></span>
+	data-pause-time={pauseTime}
+	data-hitokoto={hitokoto ? "true" : undefined}
+	data-hitokoto-categories={hitokotoCategories.join(",")}></span>
 
 <script>
 	class TypewriterEffect {
@@ -35,6 +41,8 @@ const textData = Array.isArray(text) ? JSON.stringify(text) : text;
 		private currentIndex = 0;
 		private isDeleting = false;
 		private timeoutId: number | null = null;
+		private hitokoto = false;
+		private hitokotoCategories: string[] = [];
 
 		constructor(element: HTMLElement) {
 			this.element = element;
@@ -51,13 +59,64 @@ const textData = Array.isArray(text) ? JSON.stringify(text) : text;
 			this.speed = parseInt(element.dataset.speed || "100");
 			this.deleteSpeed = parseInt(element.dataset.deleteSpeed || "50");
 			this.pauseTime = parseInt(element.dataset.pauseTime || "2000");
+			this.hitokoto = element.dataset.hitokoto === "true";
+			this.hitokotoCategories = (element.dataset.hitokotoCategories || "")
+				.split(",")
+				.map((c) => c.trim())
+				.filter(Boolean);
 
-			// 如果有多条文本且未启用打字机效果，随机显示一条
-			if (this.texts.length > 1 && !this.isTypewriterEnabled()) {
+			if (this.hitokoto) {
+				this.startHitokoto();
+			} else if (this.texts.length > 1 && !this.isTypewriterEnabled()) {
+				// 如果有多条文本且未启用打字机效果，随机显示一条
 				this.showRandomText();
 			} else {
 				this.start();
 			}
+		}
+
+		// 从一言API获取随机句子，失败时返回 null
+		private async fetchHitokoto(): Promise<string | null> {
+			const params = new URLSearchParams();
+			for (const c of this.hitokotoCategories) {
+				params.append("c", c);
+			}
+			const query = params.toString();
+			const apiUrl = `https://v1.hitokoto.cn/${query ? `?${query}` : ""}`;
+			try {
+				const res = await fetch(apiUrl);
+				if (!res.ok) {
+					return null;
+				}
+				const data = await res.json();
+				return typeof data?.hitokoto === "string" && data.hitokoto.trim()
+					? data.hitokoto.trim()
+					: null;
+			} catch {
+				return null;
+			}
+		}
+
+		// 一言模式：先获取句子（失败时回退到静态文本），然后开始打字
+		private async startHitokoto() {
+			const sentence = await this.fetchHitokoto();
+			if (sentence) {
+				this.texts = [sentence];
+			}
+			this.currentTextIndex = 0;
+			this.currentIndex = 0;
+			this.isDeleting = false;
+			this.start();
+		}
+
+		// 一言模式：获取下一句后继续打字循环，失败时保留当前句子
+		private async fetchNextAndType() {
+			const sentence = await this.fetchHitokoto();
+			if (sentence) {
+				this.texts = [sentence];
+				this.currentTextIndex = 0;
+			}
+			this.type();
 		}
 
 		private isTypewriterEnabled(): boolean {
@@ -103,12 +162,20 @@ const textData = Array.isArray(text) ? JSON.stringify(text) : text;
 				} else {
 					// 删除完成，切换到下一条文本
 					this.isDeleting = false;
-					this.currentTextIndex =
-						(this.currentTextIndex + 1) % this.texts.length;
-					this.timeoutId = window.setTimeout(
-						() => this.type(),
-						this.speed,
-					);
+					if (this.hitokoto) {
+						// 一言模式：获取下一句后继续
+						this.timeoutId = window.setTimeout(
+							() => void this.fetchNextAndType(),
+							this.speed,
+						);
+					} else {
+						this.currentTextIndex =
+							(this.currentTextIndex + 1) % this.texts.length;
+						this.timeoutId = window.setTimeout(
+							() => this.type(),
+							this.speed,
+						);
+					}
 				}
 			} else {
 				// 添加字符
@@ -123,8 +190,8 @@ const textData = Array.isArray(text) ? JSON.stringify(text) : text;
 						this.speed,
 					);
 				} else {
-					// 打字完成，暂停后开始删除（如果有多条文本）
-					if (this.texts.length > 1) {
+					// 打字完成，暂停后开始删除（如果有多条文本或一言模式需要轮播）
+					if (this.texts.length > 1 || this.hitokoto) {
 						this.isDeleting = true;
 						this.timeoutId = window.setTimeout(
 							() => this.type(),

@@ -239,6 +239,10 @@ export interface ProfileConfig {
 	typewriter?: {
 		enable: boolean; // 是否启用打字机效果
 		speed?: number; // 打字速度（毫秒）
+		hitokoto?: {
+			enable: boolean; // 是否使用一言API随机句子作为简介
+			categories?: string[]; // 句子类型：a动画 b漫画 d文学 h影视 i诗词 k哲学等
+		};
 	};
 }
 
