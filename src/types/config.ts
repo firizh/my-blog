@@ -163,7 +163,11 @@ export interface SiteConfig {
 		homeText?: {
 			enable: boolean; // 是否在首页显示自定义文字
 			title?: string; // 主标题
-			subtitle?: string | string[]; // 副标题，支持单个字符串或字符串数组
+			subtitle?: string | string[]; // 副标题，支持单个字符串或字符串数组（启用hitokoto时作为请求失败的降级文案）
+			hitokoto?: {
+				enable: boolean; // 是否启用一言API副标题（每次轮播切换时自动获取新句子）
+				api?: string; // 一言API地址
+			};
 			typewriter?: {
 				enable: boolean; // 是否启用打字机效果
 				speed: number; // 打字速度（毫秒）

@@ -41,6 +41,14 @@ const {
 	showWave = siteConfig.banner.waves?.enable ?? true,
 } = Astro.props;
 
+// 一言副标题配置：启用后副标题从一言API获取，每次轮播切换时自动换句，失败降级为 subtitle 默认文案
+const hitokotoEnabled = !!siteConfig.banner.homeText?.hitokoto?.enable;
+const hitokotoApi =
+	siteConfig.banner.homeText?.hitokoto?.api || "https://v1.hitokoto.cn/";
+const hitokotoFallback = Array.isArray(overlaySubtitle)
+	? overlaySubtitle
+	: [String(overlaySubtitle ?? "")];
+
 // 标准化图片数组
 const normalizeToArray = (images: string | string[]): string[] =>
 	Array.isArray(images) ? images : [images];
@@ -360,6 +368,8 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 
 					isCrossfading[type] = true;
 					window.__bannerCarouselIndex[type] = targetIndex;
+					// 通知一言副标题模块：一次轮播切换已完成（自动轮播与手动滑动共用此唯一入口）
+					try { document.dispatchEvent(new CustomEvent('banner:slidechange')); } catch (e) {}
 
 					// 清理快速交互可能残留的中间层
 					cleanupOrphanedLayers(slotClass, oldSlot);
@@ -538,7 +548,11 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 						</h1>
 					)}
 					{overlaySubtitle && (
-						<h2 class="banner-subtitle text-xl lg:text-3xl text-white/90 drop-shadow-md">
+						<h2
+							class="banner-subtitle text-xl lg:text-3xl text-white/90 drop-shadow-md"
+							data-hitokoto-api={hitokotoEnabled ? hitokotoApi : undefined}
+							data-hitokoto-fallback={hitokotoEnabled ? JSON.stringify(hitokotoFallback) : undefined}
+						>
 							<span class="inline-block min-h-[1.2em]">
 								{typewriter && Array.isArray(overlaySubtitle) ? (
 									<TypewriterText
@@ -553,11 +567,97 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 									overlaySubtitle
 								)}
 							</span>
+							{hitokotoEnabled && (
+								<div
+									id="banner-hitokoto-from"
+									class="banner-hitokoto-from mt-1 text-sm font-normal text-white/70 drop-shadow lg:text-lg lg:mt-2"
+									aria-live="polite"
+								/>
+							)}
 						</h2>
 					)}
 				</div>
 			</div>
 		</div>
+	)}
+
+	<!-- 一言副标题控制：监听轮播切换事件，从一言API获取随机句子（失败降级为默认文案） -->
+	{hitokotoEnabled && overlaySubtitle && (
+		<script is:inline data-swup-ignore-script>
+			(function () {
+				if (window.__bannerHitokotoBound) return;
+				window.__bannerHitokotoBound = true;
+
+				var subtitleEl = document.querySelector('.banner-subtitle');
+				if (!subtitleEl) return;
+
+				var api = subtitleEl.dataset.hitokotoApi || 'https://v1.hitokoto.cn/';
+				var fallback = [];
+				try { fallback = JSON.parse(subtitleEl.dataset.hitokotoFallback || '[]'); } catch (e) { fallback = []; }
+				if (!fallback.length) fallback = ['欢迎来看我的小窝'];
+
+				var inFlight = false;        // 防止请求重叠
+				var fallbackApplied = false; // 连续失败时只降级一次，避免打字效果反复重置
+
+				function getTypewriter() {
+					var el = subtitleEl.querySelector('.typewriter');
+					return el && el.__typewriter ? el.__typewriter : null;
+				}
+
+				function renderFrom(text) {
+					var fromEl = document.getElementById('banner-hitokoto-from');
+					if (!fromEl) return;
+					if (text) {
+						fromEl.textContent = '——' + text;
+						fromEl.classList.add('visible');
+					} else {
+						fromEl.textContent = '';
+						fromEl.classList.remove('visible');
+					}
+				}
+
+				function applySentence() {
+					if (inFlight) return;
+					inFlight = true;
+					var sep = api.indexOf('?') > -1 ? '&' : '?';
+					fetch(api + sep + '_=' + Date.now(), { cache: 'no-store' })
+						.then(function (res) {
+							if (!res.ok) throw new Error('HTTP ' + res.status);
+							return res.json();
+						})
+						.then(function (data) {
+							var sentence = data && data.hitokoto ? String(data.hitokoto).trim() : '';
+							if (!sentence) throw new Error('empty hitokoto');
+							var tw = getTypewriter();
+							if (tw) tw.setTexts([sentence]);
+							renderFrom(data.from ? String(data.from).trim() : '');
+							fallbackApplied = false;
+						})
+						.catch(function () {
+							// 请求失败：降级为默认文案并隐藏来源行
+							var tw = getTypewriter();
+							if (tw && !fallbackApplied) {
+								tw.setTexts(fallback);
+								fallbackApplied = true;
+							}
+							renderFrom('');
+						})
+						.finally(function () { inFlight = false; });
+				}
+
+				document.addEventListener('banner:slidechange', applySentence);
+
+				// 首次加载：等待打字机实例就绪后立即获取一句
+				var tries = 0;
+				(function fetchWhenReady() {
+					if (getTypewriter() || tries++ > 20) {
+						applySentence();
+					} else {
+						setTimeout(fetchWhenReady, 100);
+					}
+				})();
+			})();
+		</script>
 	)}
 
 	<!-- 水波纹效果 -->
@@ -653,6 +753,14 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 		animation: fadeInUp 1s ease-out;
 		font-weight: bold;
+	}
+
+	.banner-hitokoto-from {
+		display: none; /* 默认隐藏，来源数据就绪后由JS添加 visible 类显示 */
+	}
+
+	.banner-hitokoto-from.visible {
+		display: block;
 	}
 
 	.banner-subtitle {
