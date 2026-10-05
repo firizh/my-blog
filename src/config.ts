@@ -26,7 +26,7 @@ const SITE_TIMEZONE = 8; //设置你的网站时区 from -12 to 12 default in UT
 export const siteConfig: SiteConfig = {
 	title: "鱼水酱の小窝q(≧▽≦q)",
 	subtitle: "ヾ(≧▽≦*)o",
-	siteURL: "https://www.irisfish.qzz.io/", // 请替换为你的站点URL，以斜杠结尾
+	siteURL: "https://preview.irisfish.qzz.io/", // 请替换为你的站点URL，以斜杠结尾
 	siteStartDate: "2026-07-14", // 站点开始运行日期，用于站点统计组件计算运行天数
 
 	timeZone: SITE_TIMEZONE,
@@ -40,14 +40,14 @@ export const siteConfig: SiteConfig = {
 
 	// 特色页面开关配置（关闭未使用的页面有助于提升 SEO，关闭后请记得在 navbarConfig 中移除对应链接）
 	featurePages: {
-		anime: true, // 番剧页面开关
+		anime: false, // 番剧页面开关
 		diary: true, // 日记页面开关
 		friends: true, // 友链页面开关
 		projects: true, // 项目页面开关
-		skills: true, // 技能页面开关
+		skills: false, // 技能页面开关
 		timeline: true, // 时间线页面开关
 		albums: true, // 相册页面开关
-		devices: true, // 设备页面开关
+		devices: false, // 设备页面开关
 	},
 
 	// 顶栏标题配置
@@ -175,6 +175,10 @@ export const siteConfig: SiteConfig = {
 				"君と話すと、なんか毎日がちょっと楽しくなるんだ",
 				"今日はなんでもない日。でも、ちょっとだけいい日",
 			],
+			hitokoto: {
+				enable: true, // 启用一言API副标题：每次轮播切换时自动获取新句子，请求失败时降级为上面的subtitle默认文案
+				api: "https://v1.hitokoto.cn/?c=a&c=d&c=h&c=i", // 一言API地址（c=a动画 c=d漫画 c=h哲学 c=i文学）
+			},
 			typewriter: {
 				enable: true, // 启用副标题打字机效果
 
@@ -297,7 +301,6 @@ export const navBarConfig: NavBarConfig = {
 					external: true,
 					icon: "fa7-brands:bilibili",
 				},
-
 			],
 		},
 		{
@@ -305,11 +308,6 @@ export const navBarConfig: NavBarConfig = {
 			url: "/content/",
 			icon: "material-symbols:person",
 			children: [
-				{
-					name: "Anime",
-					url: "/anime/",
-					icon: "material-symbols:movie",
-				},
 				{
 					name: "Diary",
 					url: "/diary/",
@@ -319,12 +317,6 @@ export const navBarConfig: NavBarConfig = {
 					name: "Gallery",
 					url: "/albums/",
 					icon: "material-symbols:photo-library",
-				},
-				{
-					name: "Devices",
-					url: "/devices/",
-					icon: "material-symbols:devices",
-					external: false,
 				},
 			],
 		},
@@ -354,11 +346,6 @@ export const navBarConfig: NavBarConfig = {
 					name: "Projects",
 					url: "/projects/",
 					icon: "material-symbols:work",
-				},
-				{
-					name: "Skills",
-					url: "/skills/",
-					icon: "material-symbols:psychology",
 				},
 				{
 					name: "Timeline",
@@ -393,6 +380,11 @@ export const profileConfig: ProfileConfig = {
 			name: "Discord",
 			icon: "fa7-brands:discord",
 			url: "https://discord.gg/xFY5MyF9Z",
+		},
+		{
+			name: "QQ",
+			icon: "fa7-brands:qq",
+			url: "https://qm.qq.com/q/gYXSt1mcMM",
 		},
 	],
 };
@@ -485,7 +477,7 @@ export const musicPlayerConfig: MusicPlayerConfig = {
 	mode: "meting", // 音乐播放器模式，可选 "local" 或 "meting"
 	meting_api:
 		"https://meting.mysqil.com/api?server=:server&type=:type&id=:id&auth=:auth&r=:r", // Meting API 地址
-	id: "2149370388", // 歌单ID
+	id: "18205941600", // 歌单ID
 	server: "netease", // 音乐源服务器。有的meting的api源支持更多平台,一般来说,netease=网易云音乐, tencent=QQ音乐, kugou=酷狗音乐, xiami=虾米音乐, baidu=百度音乐
 	type: "playlist", // 播单类型
 };
