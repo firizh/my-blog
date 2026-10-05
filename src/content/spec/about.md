@@ -1,49 +1,47 @@
+# 关于我 (・`ω´・)
 
-This website is built with the **Astro** framework using the [Mizuki](https://github.com/matsuzaka-yuki/mizuki) theme.
+你好呀，这里是 **FishH2O**，也可以叫我鱼水酱。
+
+GitHub 上写的是 "Just a fish QWQ"——一条平平无奇但游得很开心的咸鱼。
+
+## 关于这个人
+
+先说好，虽然 ID 和说话方式看起来软乎乎的，但人家可是男孩子哦。
+
+平时的画风大概是：嘴上说"随便你啦"，转头又默默把细节抠到最好——朋友管这叫傲娇，我觉得这叫**品质保证**。
+
+- **游戏**：不是在打游戏的路上，就是在找下一个游戏的路上。Minecraft 里盖过小木屋，Undertale 里放过小花，P5 里当过怪盗，明日方舟里 box 还凑合（不问数字，谢谢配合）
+- **猫娘**：判定一只猫娘是否优秀的标准是耳朵。别问为什么，问就是信仰
+- **二次元**：档案等级"浓度超标"，具体证据见下一条
+
+## 关于歌单
+
+右下角的播放器放的就是我网易云的"喜欢的音乐"（200 首），口味画像大概是这样的：
+
+- **游戏原声浓度超标**：Minecraft（C418）、Undertale（Toby Fox）、P5、明日方舟塞壬唱片，还有 Key 社催泪组曲——前奏一响就要找个没人的地方待一会儿的那种
+- **动漫系**：神前暁老师、RADWIMPS、YOASOBI、米津玄師，一个都不能少
+- **Lofi / Chillhop**：写代码和摸鱼的时候必备，Nujabes 一响，效率看起来就很高
+- **City pop 与华语**：具島直子的慢歌、林俊杰和陈奕迅的回忆杀、万青的石家庄，切换自如
+- **欧美**：The Weeknd、Eminem——所以说我的耳机里住着一整个二次元加一台游戏机，没什么问题吧？
+
+## 关于本站
+
+本站基于 Astro 框架与 Mizuki 主题构建：
 
 ::github{repo="matsuzaka-yuki/Mizuki"}
 
-## 🌟 Theme Features
+用来记录一些游戏、番剧、画师安利之类的碎碎念。更新频率随缘，但每一篇都是认真写的（这次是真的）。
 
-### 🎨 Design & User Experience
-- **Modern & Elegant Design** - Clean, minimalist interface with beautiful typography
-- **Fully Responsive** - Optimized for all devices from mobile to desktop
-- **Dark/Light Mode** - Automatic theme switching with smooth transitions
-- **Beautiful Typography** - Enhanced readability with JetBrains Mono font
-- **Smooth Animations** - Fluid page transitions and interactive elements
+## 找到我
 
-### 🔍 Content & Search
-- **Advanced Search** - Powered by [Pagefind](https://pagefind.app/) for fast, accurate results
-- **Enhanced Markdown** - Extended syntax with code highlighting and math support
-- **Interactive Table of Contents** - Auto-scroll navigation for long articles
-- **RSS Feed Generation** - Stay updated with automatic feed generation
-- **Reading Time Estimation** - Know how long articles take to read
-- **Post Categorization** - Organize content with tags and categories
-
-
-
-### 📱 Special Pages
-- **Anime Tracking Page** - Track your anime watching progress with ratings
-- **Friends Links Page** - Showcase friend websites with beautiful cards
-- **Diary/Moments Page** - Share life moments like social media posts
-- **Archive Page** - Organized timeline view of all posts
-- **About Page** - Customizable personal introduction (this page!)
-
-### 🛠 Technical Features
-- **Enhanced Code Blocks** - Powered by [Expressive Code](https://expressive-code.com/)
-- **Math Support** - LaTeX rendering with KaTeX for mathematical expressions
-- **Image Optimization** - PhotoSwipe gallery with lazy loading
-- **SEO Optimized** - Built-in sitemap and meta tags for better search visibility
-- **Performance Optimized** - Fast loading with caching and optimization
-- **Comment System Ready** - Integration support for Twikoo comments
-
-### 🎯 Advanced Markdown Features
-- **Callouts & Admonitions** - Beautiful info boxes with `> [!NOTE]`, `> [!TIP]`, `> [!WARNING]`
-- **Mathematical Equations** - Write LaTeX math with `$inline$` and `$$block$$` syntax
-- **GitHub Cards** - Embed repository cards with `::github{repo="user/repo"}`
-- **Syntax Highlighting** - Advanced code highlighting with line numbers
-- **Copy Code Buttons** - Easy code copying functionality
+- Bilibili：[鱼水酱の小窝](https://space.bilibili.com/1379983523)
+- GitHub：[firizh](https://github.com/firizh)
+- Discord：[邀请链接](https://discord.gg/xFY5MyF9Z)
 
 ---
 
-*Built with ❤️ using Astro and inspired by modern web design principles.*
+嘛，能读到这里的话，说明你意外地有耐心呢。
+
+才、才不是特意欢迎你哦……不过既然来了，就随便看看再走吧。
+
+(¬‿¬)
