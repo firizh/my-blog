@@ -146,7 +146,7 @@ export const siteConfig: SiteConfig = {
 
 		carousel: {
 			enable: true, // 为 true 时：为多张图片启用轮播。为 false 时：从数组中随机显示一张图片
-			interval: 10, // 轮播间隔时间（秒）
+			interval: 6, // 轮播间隔时间（秒）
 		},
 
 		waves: {
@@ -168,15 +168,8 @@ export const siteConfig: SiteConfig = {
 			enable: true, // 在主页显示自定义文本
 			title: "鱼水酱の小窝q(≧▽≦q)", // 主页横幅主标题
 
-			subtitle: [
-				"特別なことはないけど、君がいると十分です",
-				"今でもあなたは私の光",
-				"君ってさ、知らないうちに私の毎日になってたよ",
-				"君と話すと、なんか毎日がちょっと楽しくなるんだ",
-				"今日はなんでもない日。でも、ちょっとだけいい日",
-			],
 			hitokoto: {
-				enable: true, // 启用一言API副标题：每次轮播切换时自动获取新句子，请求失败时降级为上面的subtitle默认文案
+				enable: true, // 启用一言API副标题：每次轮播切换时自动获取新句子，请求失败时显示组件内置兜底文案
 				api: "https://v1.hitokoto.cn/?c=a&c=d&c=h&c=i", // 一言API地址（c=a动画 c=d漫画 c=h哲学 c=i文学）
 			},
 			typewriter: {

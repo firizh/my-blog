@@ -41,13 +41,16 @@ const {
 	showWave = siteConfig.banner.waves?.enable ?? true,
 } = Astro.props;
 
-// 一言副标题配置：启用后副标题从一言API获取，每次轮播切换时自动换句，失败降级为 subtitle 默认文案
+// 一言副标题配置：启用后副标题从一言API获取，每次轮播切换时自动换句，失败时显示脚本内置兜底文案
 const hitokotoEnabled = !!siteConfig.banner.homeText?.hitokoto?.enable;
 const hitokotoApi =
 	siteConfig.banner.homeText?.hitokoto?.api || "https://v1.hitokoto.cn/";
-const hitokotoFallback = Array.isArray(overlaySubtitle)
+// 副标题文案池：仅当静态subtitle仍有配置时使用；一言模式下允许为空（首帧空白，等待API返回）
+const subtitlePool: string[] = Array.isArray(overlaySubtitle)
 	? overlaySubtitle
-	: [String(overlaySubtitle ?? "")];
+	: overlaySubtitle
+		? [overlaySubtitle]
+	: [];
 
 // 标准化图片数组
 const normalizeToArray = (images: string | string[]): string[] =>
@@ -547,24 +550,22 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 							{overlayTitle}
 						</h1>
 					)}
-					{overlaySubtitle && (
+					{(overlaySubtitle || hitokotoEnabled) && (
 						<h2
 							class="banner-subtitle text-xl lg:text-3xl text-white/90 drop-shadow-md"
 							data-hitokoto-api={hitokotoEnabled ? hitokotoApi : undefined}
-							data-hitokoto-fallback={hitokotoEnabled ? JSON.stringify(hitokotoFallback) : undefined}
+							data-hitokoto-fallback={hitokotoEnabled ? JSON.stringify(subtitlePool) : undefined}
 						>
 							<span class="inline-block min-h-[1.2em]">
-								{typewriter && Array.isArray(overlaySubtitle) ? (
+								{typewriter ? (
 									<TypewriterText
-										text={overlaySubtitle}
+										text={subtitlePool.length ? subtitlePool : [""]}
 										speed={siteConfig.banner.homeText?.typewriter?.speed}
 										deleteSpeed={siteConfig.banner.homeText?.typewriter?.deleteSpeed}
 										pauseTime={siteConfig.banner.homeText?.typewriter?.pauseTime}
 									/>
-								) : Array.isArray(overlaySubtitle) ? (
-									overlaySubtitle[0]
 								) : (
-									overlaySubtitle
+									subtitlePool[0] ?? ""
 								)}
 							</span>
 							{hitokotoEnabled && (
@@ -582,7 +583,7 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 	)}
 
 	<!-- 一言副标题控制：监听轮播切换事件，从一言API获取随机句子（失败降级为默认文案） -->
-	{hitokotoEnabled && overlaySubtitle && (
+	{hitokotoEnabled && (
 		<script is:inline data-swup-ignore-script>
 			(function () {
 				if (window.__bannerHitokotoBound) return;

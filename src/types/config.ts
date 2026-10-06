@@ -163,7 +163,7 @@ export interface SiteConfig {
 		homeText?: {
 			enable: boolean; // 是否在首页显示自定义文字
 			title?: string; // 主标题
-			subtitle?: string | string[]; // 副标题，支持单个字符串或字符串数组（启用hitokoto时作为请求失败的降级文案）
+			subtitle?: string | string[]; // 静态副标题，可选；未配置且启用hitokoto时由一言API与组件兜底文案接管
 			hitokoto?: {
 				enable: boolean; // 是否启用一言API副标题（每次轮播切换时自动获取新句子）
 				api?: string; // 一言API地址
