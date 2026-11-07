@@ -145,13 +145,36 @@ const textData = Array.isArray(text) ? JSON.stringify(text) : text;
 				clearTimeout(this.timeoutId);
 			}
 		}
+
+		/**
+		 * 替换待播放文本并重新开始打字（供外部模块动态更新副标题使用）
+		 * 单条文本时保持常驻显示，多条时恢复打字-删除循环
+		 */
+		public setTexts(newTexts: string[]) {
+			if (!Array.isArray(newTexts) || newTexts.length === 0) {
+				return;
+			}
+			if (this.timeoutId) {
+				clearTimeout(this.timeoutId);
+				this.timeoutId = null;
+			}
+			this.texts = newTexts;
+			this.currentTextIndex = 0;
+			this.currentIndex = 0;
+			this.isDeleting = false;
+			this.element.textContent = "";
+			this.type();
+		}
 	}
 
 	// 初始化所有打字机效果
 	document.addEventListener("DOMContentLoaded", () => {
 		const typewriterElements = document.querySelectorAll(".typewriter");
 		typewriterElements.forEach((element) => {
-			new TypewriterEffect(element as HTMLElement);
+			const instance = new TypewriterEffect(element as HTMLElement);
+			(
+				element as HTMLElement & { __typewriter?: TypewriterEffect }
+			).__typewriter = instance;
 		});
 	});
 
@@ -159,7 +182,10 @@ const textData = Array.isArray(text) ? JSON.stringify(text) : text;
 	document.addEventListener("swup:contentReplaced", () => {
 		const typewriterElements = document.querySelectorAll(".typewriter");
 		typewriterElements.forEach((element) => {
-			new TypewriterEffect(element as HTMLElement);
+			const instance = new TypewriterEffect(element as HTMLElement);
+			(
+				element as HTMLElement & { __typewriter?: TypewriterEffect }
+			).__typewriter = instance;
 		});
 	});
 </script>
